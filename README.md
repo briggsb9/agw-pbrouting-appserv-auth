@@ -59,9 +59,6 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
 3. **Easy Auth Configuration (auth.json)**:
     - When using App Service Easy Auth behind Application Gateway, authentication redirects default to the app's Azure domain, often causing errors. To fix this, configure Easy Auth to read the X-Original-Host header from Application Gateway using file-based configuration as described in [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#enabling-file-based-configuration).  
 
-    >[!NOTE]
-    > One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this below.
-
     - Update your `auth.json` to define the required HTTP settings:
         ```json
         "httpSettings": {
@@ -75,7 +72,10 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
         }
         }
         ```
-    - If issues persist, add `"allowedExternalRedirectUrls"` to include `https://YOURDOMAIN.com/YOURPATH`.
+    - If issues persist, refer to the [configuration file reference](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#configuration-file-reference) and ensure you have the correct configuration for your scenario. For example, adding a value for  `"allowedExternalRedirectUrls"` to include `https://YOURDOMAIN.com/YOURPATH`.
+
+>[!NOTE]
+> One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this above for clarity.
 
 #### Pros:
 - **Minimal Code Changes**: Allows for quick integration with Easy Auth.
