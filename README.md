@@ -81,6 +81,7 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
         }
         ```
     - If issues persist, refer to the [configuration file reference](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#configuration-file-reference) and ensure you have the correct configuration for your scenario. For example, adding a value for  `"allowedExternalRedirectUrls"` to include `https://YOURDOMAIN.com/YOURPATH`.
+    - Finally, make sure your app is configured to accept requests at the specified path. For Windows App Services, this can be done by mapping a [virtual directory](https://learn.microsoft.com/en-us/azure/app-service/configure-common?tabs=portal#map-a-url-path-to-a-directory) to the path. For Linux, this can be done by updating the app routes in your code.
 
 >[!NOTE]
 > One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this above for clarity.
