@@ -79,14 +79,6 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
 >[!NOTE]
 > One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this above for clarity.
 
-#### Pros:
-- **Minimal Code Changes**: Allows for quick integration with Easy Auth.
-- **Host Header Management**: Ensures original host headers are respected.
-
-#### Cons:
-- **Complex Configuration**: Requires careful management of `auth.json` and App Gateway settings.
-- **Limited Flexibility**: Easy Auth’s configurations may not cover all custom scenarios, especially with path-based routing.
-
 ---
 
 ### Option 2: Code-Based Authentication with Host Header Override
@@ -102,29 +94,21 @@ Note: The steps below assume you have an existing Azure App Service and an Azure
    - Update the app routes in app.py to ensure your app responds to the path set in App Gateway. Each route must be configured to accept requests at the specified path (e.g., `@app.route("/YOURPATH")`).
    - Define the `REDIRECT_PATH` in `app_config.py` with the format `/YOURPATH/getAToken`.
 
-#### Pros:
-- **Full Control**: Customizable to fit specific routing and authentication requirements.
-- **Greater Flexibility**: Allows complex configurations that may not be possible with Easy Auth.
-
-#### Cons:
-- **More Development Effort**: Requires additional coding and testing.
-- **Manual Host Header Management**: You’ll need to handle headers, paths, and redirects carefully to ensure compatibility with App Gateway.
-
 ---
 
-## Pros and Cons of Each Approach
+## Pros and Cons of Each Approach in Path-Based Routing Scenarios
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
-| **Easy Auth with Host Override**  | Minimal code changes, preserves headers | Complex configuration, limited flexibility |
-| **Code-Based Authentication**     | Full control, flexible               | Requires coding, manual configuration |
+| **Easy Auth with Host Override**  | Minimal code changes | Complex configuration, limited flexibility |
+| **Code-Based Authentication**     | Full control, flexible               | Requires code level changes and config management |
 
 ---
 
 ## Key Considerations and Best Practices
 
 1. **Host Headers and Redirect URLs**: Ensure that host headers match expected values to prevent redirect mismatches.
-2. **Callback URL Consistency**: Confirm that callback URLs are consistently configured in both App Service and Azure AD to match the path-based routing setup.
+2. **Callback URL Consistency**: Confirm that callback URLs are consistently configured in both App Service and Entra ID to match the path-based routing setup.
 3. **Avoid Overlapping Paths**: Be cautious with wildcard entries in routing (e.g., `/app*`), which may unintentionally capture routes for other applications.
 4. **Health Probes**: When using App Gateway, configure health probes to target the correct path (e.g., `/YOUR_APP_PATH/`) and verify that App Service responds correctly.
 
