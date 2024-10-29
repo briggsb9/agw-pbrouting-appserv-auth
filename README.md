@@ -7,7 +7,7 @@ Azure Application Gateway (App Gateway) provides the ability to route traffic to
 ## Contents
 
 1. [Understanding the Challenge with Path-Based Routing and Authentication](#understanding-the-challenge-with-path-based-routing-and-authentication)
-2. [Recommended Approach: Subdomain Routing](#recommended-approach-subdomain-routing)
+2. [Recommended Approach: Subdomain Routing](#Subdomains-vs-Path-Based-Routing)
 3. [Path-Based Routing Options](#path-based-routing-options)
    - [Option 1: Easy Auth with Host Header Override](#option-1-easy-auth-with-host-header-override)
    - [Option 2: Code-Based Authentication with Host Header Override](#option-2-code-based-authentication-with-host-header-override)
@@ -103,7 +103,7 @@ Note: The steps below assume you have an existing Azure App Service and an Azure
 
 ---
 
-## Pros and Cons of Each Approach in Path-Based Routing Scenarios
+## Pros and Cons of Each Approach
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
