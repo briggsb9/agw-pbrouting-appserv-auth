@@ -42,6 +42,8 @@ However, if subdomain routing is not feasible, path-based routing can be used wi
 
 ## Path-Based Routing Options
 
+![Path-Based Routing](images/pbrouting.png)
+
 ### Option 1: Easy Auth with Host Header Override
 
 Using Azure App Service’s Easy Auth with path-based routing requires configuring the host headers and authentication settings to ensure that requests respect the path and route configurations.
