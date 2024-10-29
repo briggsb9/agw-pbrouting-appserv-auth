@@ -57,26 +57,25 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
 2. **App Registration Callback URL**: Ensure the app registration includes the correct callback URL, including the path (e.g., `https://yourdomain.com/yourpath/.auth/login/aad/callback`).
 
 3. **Easy Auth Configuration (auth.json)**:
-- When using App Service Easy Auth behind Application Gateway, authentication redirects default to the app's Azure domain, often causing errors. To fix this, configure Easy Auth to read the X-Original-Host header from Application Gateway using file-based configuration as described in [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#enabling-file-based-configuration).  
+    - When using App Service Easy Auth behind Application Gateway, authentication redirects default to the app's Azure domain, often causing errors. To fix this, configure Easy Auth to read the X-Original-Host header from Application Gateway using file-based configuration as described in [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#enabling-file-based-configuration).  
 
+    - >[!NOTE]
+      > One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this below.
 
->[!NOTE]
-> One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this below.
-
-- Update your `auth.json` to define the required HTTP settings:
-     ```json
-     "httpSettings": {
-       "requireHttps": true,
-       "routes": {
-         "apiPrefix": "/YOUR_APP_PATH/.auth"
-       },
-       "forwardProxy": {
-         "convention": "Custom",
-         "customHostHeaderName": "X-Original-Host"
-       }
-     }
-     ```
-- If issues persist, add `"allowedExternalRedirectUrls"` to include `https://YOURDOMAIN.com/YOURPATH`.
+    - Update your `auth.json` to define the required HTTP settings:
+        ```json
+        "httpSettings": {
+        "requireHttps": true,
+        "routes": {
+            "apiPrefix": "/YOUR_APP_PATH/.auth"
+        },
+        "forwardProxy": {
+            "convention": "Custom",
+            "customHostHeaderName": "X-Original-Host"
+        }
+        }
+        ```
+    - If issues persist, add `"allowedExternalRedirectUrls"` to include `https://YOURDOMAIN.com/YOURPATH`.
 
 #### Pros:
 - **Minimal Code Changes**: Allows for quick integration with Easy Auth.
@@ -95,11 +94,11 @@ For scenarios requiring more flexibility, implementing custom authentication wit
 Note: The steps below assume you have an existing Azure App Service and an Azure Application Gateway set up with [path-based routing](https://learn.microsoft.com/en-us/azure/application-gateway/create-url-route-portal) rules.
 
 #### Steps:
-1. **Set up Authentication in Code**: Configure your app to authenticate users using a code-based approach (e.g., with Microsoft Entra ID). Refer to the [Quickstart for Python Flask web app](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp) to set up authentication.
+1. **Set up Authentication in Code**: Configure your app to authenticate users using a code-based approach with Microsoft Entra ID. Refer to the [Quickstart for Python Flask web app](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp) to set up authentication.
 
 2. **Path-Based Routing Adjustments**:
-   - Update routes to ensure your app responds to the path set in App Gateway. Define the `REDIRECT_PATH` in `app_config.py` with the format `/YOURPATH/getAToken`.
-   - Each route must be configured to accept requests at the specified path (e.g., `@app.route("/YOURPATH")`).
+   - Update the app routes in app.py to ensure your app responds to the path set in App Gateway. Each route must be configured to accept requests at the specified path (e.g., `@app.route("/YOURPATH")`).
+   - Define the `REDIRECT_PATH` in `app_config.py` with the format `/YOURPATH/getAToken`.
 
 #### Pros:
 - **Full Control**: Customizable to fit specific routing and authentication requirements.
