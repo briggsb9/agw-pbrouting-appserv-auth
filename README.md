@@ -94,7 +94,7 @@ For scenarios requiring more flexibility, implementing custom authentication wit
 
 Note: The steps below assume you have an existing Azure App Service and an Azure Application Gateway set up with [path-based routing](https://learn.microsoft.com/en-us/azure/application-gateway/create-url-route-portal) rules.
 
-#### Steps:
+#### Additional Steps:
 1. **Set up Authentication in Code**: Configure your app to authenticate users using a code-based approach with Microsoft Entra ID. Refer to the [Quickstart for Python Flask web app](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp) to set up authentication.
 
 2. **Path-Based Routing Adjustments**:
