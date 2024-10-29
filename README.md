@@ -12,7 +12,7 @@ Azure Application Gateway (App Gateway) provides the ability to route traffic to
    - [Option 1: Easy Auth with Host Header Override](#option-1-easy-auth-with-host-header-override)
    - [Option 2: Code-Based Authentication with Host Header Override](#option-2-code-based-authentication-with-host-header-override)
 4. [Pros and Cons of Each Approach](#pros-and-cons-of-each-approach)
-5. [Key Considerations and Best Practices](#key-considerations-and-best-practices)
+5. [Key Considerations and Best Practices](#general-tips)
 
 ---
 
@@ -108,11 +108,11 @@ Note: The steps below assume you have an existing Azure App Service and an Azure
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
 | **Easy Auth with Host Override**  | Minimal code changes | Complex configuration, limited flexibility |
-| **Code-Based Authentication**     | Full control, flexible               | Requires code level changes and config management |
+| **Code-Based Authentication**     | Full control, flexible, login page customisation               | Requires code level changes and config management |
 
 ---
 
-## Key Considerations and Best Practices
+## General Tips
 
 1. **Host Headers and Redirect URLs**: Ensure that host headers match expected values to prevent redirect mismatches.
 2. **Callback URL Consistency**: Confirm that callback URLs are consistently configured in both App Service and Entra ID to match the path-based routing setup.
