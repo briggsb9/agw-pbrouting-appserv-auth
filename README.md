@@ -38,7 +38,7 @@ With subdomains, each application behind the App Gateway can maintain unique aut
 - **Reduced Risks**: Avoids issues with overlapping paths, host header overrides, and wildcard routing conflicts.
 - **More Reliable Auth Flows**: Supports a more stable integration with Easy Auth or other identity providers.
 
-However, Path-based routing is often used when the apps or services are related and need to share a common base URL. Examples include sites with shared authentication or API endpoints that are part of the same application. In these cases, path-based routing is preferred, but it requires careful configuration to ensure authentication flows work as expected.
+Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include sites with shared authentication or API endpoints that are part of the same application. In these cases, path-based routing is preferred, but it requires careful configuration to ensure authentication flows work as expected.
 
 ---
 
