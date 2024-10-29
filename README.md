@@ -1,6 +1,6 @@
 # Configuring Authentication for Azure App Service Behind Application Gateway with Path-Based Routing
 
-Azure Application Gateway (App Gateway) provides the ability to route traffic to multiple backends using path-based routing. However, when integrating authentication services, such as Azure App Service authentication (otherwise known as easy auth), complexities arise. This guidance discusses challenges and considerations when implementing authentication in App Service behind an App Gateway with path-based routing.
+Azure Application Gateway (App Gateway) provides the ability to route traffic to multiple backends using path-based routing. However, when integrating authentication, such as Azure App Service authentication (otherwise known as easy auth), complexities arise. This guidance discusses challenges and considerations when implementing such a an approach.
 
 ---
 
