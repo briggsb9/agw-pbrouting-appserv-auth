@@ -46,6 +46,13 @@ Path-based routing, however, is often used when the apps or services are related
 
 ![Path-Based Routing](images/pbrouting.png)
 
+The diagram above shows a scenario where apps sharing an App Service plan may require different approaches to authentication, i.e., one with authentication and one without (anonymous).  
+
+Authentication can be handled using two options: Easy Auth and code-based authentication. In both approaches, the default App Service hostname is used to avoid domain conflicts. This is due to limitations in configuring the same custom domain for multiple App Services. See [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/manage-custom-dns-migrate-domain#how-do-i-migrate-a-domain-from-another-app:~:text=A%20domain%20name%20can%20be%20assigned%20to%20only%20one%20app%20in%20each%20deployment%20unit.) for more information.
+
+>[!WARNING]
+> Not using a custom domain on the app service backend goes against general best practice for preserving the hostname end-to-end. Verify the impact of using the default hostname by consulting [Azure’s host name preservation guide](https://learn.microsoft.com/en-us/azure/architecture/best-practices/host-name-preservation).
+
 ### Option 1: Easy Auth with Host Header Override
 
 Using Azure App Service’s Easy Auth with path-based routing requires configuring the host headers and authentication settings to ensure that requests respect the path and route configurations.
@@ -54,9 +61,6 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
 
 #### Additional Steps:
 1. **App Gateway Configuration**: Set up the backend HTTP setting in App Gateway to pick the hostname from the backend target. This uses the default App Service hostname to avoid domain conflicts. 
-
->[!WARNING]
-> Verify the impact of using the default hostname by consulting [Azure’s host name preservation guide](https://learn.microsoft.com/en-us/azure/architecture/best-practices/host-name-preservation).
 
 2. **App Registration Callback URL**: Ensure the app registration includes the correct callback URL, including the path (e.g., `https://yourdomain.com/yourpath/.auth/login/aad/callback`).
 
