@@ -86,7 +86,7 @@ Note: The steps below assume you have an existing Azure App Service with [easy a
     - Finally, make sure your app is configured to accept requests at the specified path. For Windows App Services, this can be done by mapping a [virtual directory](https://learn.microsoft.com/en-us/azure/app-service/configure-common?tabs=portal#map-a-url-path-to-a-directory) to the path. For Linux, this can be done by updating the app routes in your code.
 
 >[!NOTE]
-> One aspect not well documented is the value of "apiPrefix". It should match your app path to ensure Easy Auth respects the path-based routing. I've included this above for clarity.
+> One aspect that is not well-documented is the impact of the apiPrefix setting within file-based configuration. Without setting this value, Easy Auth will redirect to the root domain, disregarding your path-based routing configuration. To ensure correct routing, modify the apiPrefix value to match your app's path, as shown in the auth.json example above.
 
 ---
 
