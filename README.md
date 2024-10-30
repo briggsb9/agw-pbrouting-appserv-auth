@@ -111,8 +111,8 @@ Note: The steps below assume you have an existing Azure App Service and an Azure
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
-| **Easy Auth with Host Override**  | Minimal code changes | Complex configuration, limited flexibility |
-| **Code-Based Authentication**     | Full control, flexible, login page customisation               | Requires code level changes and config management |
+| **Easy Auth with Host Override**  | Minimal app code changes | Complex App Service configuration, limited flexibility |
+| **Code-Based Authentication**     | Full control, flexible, login page customisation               | Dependency on developer skills and code level changes |
 
 ---
 
