@@ -38,7 +38,9 @@ With subdomains, each application behind the App Gateway can maintain unique aut
 - **Reduced Risks**: Avoids issues with overlapping paths, host header overrides, and wildcard routing conflicts.
 - **More Reliable Auth Flows**: Supports a more stable integration with Easy Auth or other identity providers.
 
-Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but it requires careful configuration to ensure authentication flows work as expected. This is especially true with more nuanced use cases where you might have multiple authentication flows, or a mixture of anonymous and auth enabled apps behind a single domain name.
+Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but it requires careful configuration to ensure authentication flows work as expected. 
+
+The guidance below is focused on more nuanced use cases where you might have multiple authentication flows, or a mixture of anonymous and auth enabled apps behind a single domain name.
 
 ---
 
@@ -109,12 +111,12 @@ Note: The guidance below assume you have an existing Azure App Service and an Az
 
 ---
 
-## Pros and Cons of Each Approach
+## Options Summary
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
-| **Easy Auth with Host Override**  | Minimal app code changes | Complex App Service configuration, limited flexibility |
-| **Code-Based Authentication**     | Full control, flexible, login page customisation               | Dependency on developer skills and code level changes |
+| **Easy Auth**  | Minimal app code changes | Complex App Service configuration, limited flexibility |
+| **Code-Based Auth**     | Full control, flexible, login page customisation               | Dependency on developer skills and code level changes |
 
 ---
 
