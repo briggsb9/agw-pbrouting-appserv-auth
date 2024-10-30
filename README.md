@@ -12,7 +12,7 @@ Azure Application Gateway (App Gateway) provides the ability to route traffic to
    - [Option 1: Easy Auth with Host Header Override](#option-1-easy-auth-with-host-header-override)
    - [Option 2: Code-Based Authentication with Host Header Override](#option-2-code-based-authentication-with-host-header-override)
 4. [Pros and Cons of Each Approach](#pros-and-cons-of-each-approach)
-5. [Key Considerations and Best Practices](#general-tips)
+5. [General Tips](#general-tips)
 
 ---
 
