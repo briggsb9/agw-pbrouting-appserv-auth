@@ -40,7 +40,7 @@ With subdomains, each application behind the App Gateway can maintain unique aut
 
 Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but it requires careful configuration to ensure authentication flows work as expected. 
 
-The guidance below is focused on more nuanced use cases, where you might have multiple authentication flows, or a mixture of anonymous and auth enabled apps behind a single domain name.
+This write-up focuses on more nuanced use cases, such as scenarios where you might be trying to achieve multiple authentication flows or a mix of anonymous and authentication-enabled apps behind a single domain name. Hopefully, it will become clear that subdomain routing is the simpler and more reliable option in these cases.
 
 ---
 
