@@ -103,7 +103,7 @@ Note: The steps below assume you have an existing Azure App Service and an Azure
    - Update the app routes in app.py to ensure your app responds to the path set in App Gateway. Each route must be configured to accept requests at the specified path (e.g., `@app.route("/YOURPATH")`).
    - Define the `REDIRECT_PATH` in `app_config.py` with the format `/YOURPATH/getAToken`.
 
-4. **Deployment**: Deploy the app to your Azure App Service using your CI/CD process or the [Azure Tools](https://code.visualstudio.com/docs/python/python-on-azure) extention in VSCode. 
+4. **Deployment**: Deploy the app to your Azure App Service using your CI/CD process or the [Azure Tools](https://code.visualstudio.com/docs/python/python-on-azure) extension in VSCode. 
 
 ---
 
