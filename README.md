@@ -95,11 +95,15 @@ For scenarios requiring more flexibility, implementing custom authentication wit
 Note: The steps below assume you have an existing Azure App Service and an Azure Application Gateway set up with [path-based routing](https://learn.microsoft.com/en-us/azure/application-gateway/create-url-route-portal) rules.
 
 #### Additional Steps:
-1. **Set up Authentication in Code**: Configure your app to authenticate users using a code-based approach with Microsoft Entra ID. Refer to the [Quickstart for Python Flask web app](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-python-webapp) to set up authentication.
+1. **Set up Authentication in Code**: Configure your app to authenticate users using a code-based approach with Microsoft Entra ID. Refer to the [Quickstart for Python Flask web app](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-web-app-python-flask?tabs=windows) to set up authentication with a sample app.
 
-2. **Path-Based Routing Adjustments**:
+2. **App Registration Adjustments**: Ensure the redirect URI in the app registraion matches that of your app hostname and path. For the quickstart this will be 'https://YOURDOMAIN.COM/YOURPATH/getAToken'
+
+3. **Path-Based Routing Adjustments**:
    - Update the app routes in app.py to ensure your app responds to the path set in App Gateway. Each route must be configured to accept requests at the specified path (e.g., `@app.route("/YOURPATH")`).
    - Define the `REDIRECT_PATH` in `app_config.py` with the format `/YOURPATH/getAToken`.
+
+4. **Deployment**: Deploy the app to your Azure App Service using your CI/CD process or the [Azure Tools](https://code.visualstudio.com/docs/python/python-on-azure) extention in VSCode. 
 
 ---
 
