@@ -42,7 +42,7 @@ Path-based routing, however, is often used when the apps or services are related
 
 
 >[!IMPORTANT]
-> This write-up focuses on more nuanced use cases, such as scenarios where you might be trying to achieve multiple authentication flows or a mix of anonymous and authentication-enabled apps behind a single domain name. Hopefully, it will become clear that subdomain routing is the simpler and more reliable option in these cases.
+> This write-up focuses on more nuanced use cases, such as scenarios where you might be trying to achieve multiple authentication flows or a mix of anonymous and authentication-enabled apps behind a single domain name. Hopefully, it will become clear that switching to subdomain routing is the simpler and more reliable option to consider first.
 
 ---
 
