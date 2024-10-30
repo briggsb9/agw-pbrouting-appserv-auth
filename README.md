@@ -53,6 +53,8 @@ Authentication can be handled using two options: easy auth and code-based authen
 >[!WARNING]
 > Not using a custom domain on the App Service backend goes against general best practice. Verify the impact of using the default hostname by consulting [Azure’s host name preservation guide](https://learn.microsoft.com/en-us/azure/architecture/best-practices/host-name-preservation).
 
+---
+
 ### Option 1: Easy Auth with Host Header Override
 
 Using Azure App Service’s Easy Auth with path-based routing requires configuring the host headers and authentication settings to ensure that requests respect the path and route configurations.
