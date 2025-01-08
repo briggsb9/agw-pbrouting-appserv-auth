@@ -113,7 +113,7 @@ Note: The guidance below assume you have an existing Azure App Service and an Az
 
 ---
 
-## Options Summary
+## Summary - App Service Authentication with Path-Based routing Options 
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
