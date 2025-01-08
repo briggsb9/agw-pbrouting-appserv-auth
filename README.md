@@ -130,5 +130,3 @@ Note: The guidance below assume you have an existing Azure App Service and an Az
 4. **Health Probes**: When using App Gateway, configure health probes to target the correct path (e.g., `/YOUR_APP_PATH/`) and verify that App Service responds correctly.
 
 ---
-
-By following these guidelines, you can implement reliable and secure authentication for Azure App Service applications behind an Application Gateway using path-based routing. Each approach offers trade-offs, so select the one that best aligns with your architecture and operational needs.
