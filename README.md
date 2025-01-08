@@ -11,7 +11,7 @@ Azure Application Gateway (App Gateway) provides the ability to route traffic to
 3. [App Service Authentication Options with Path-Based Routing ](#app-service-authenticaton-options-with-path-based-routing)
    - [Option 1: Easy Auth with Host Header Override](#option-1-easy-auth-with-host-header-override)
    - [Option 2: Code-Based Authentication with Host Header Override](#option-2-code-based-authentication-with-host-header-override)
-4. [Pros and Cons of Each Approach](#pros-and-cons-of-each-approach)
+   - [Options Summary](#options-summary)
 5. [General Tips](#general-tips)
 
 ---
@@ -113,7 +113,8 @@ Note: The guidance below assume you have an existing Azure App Service and an Az
 
 ---
 
-## Summary - App Service Authentication with Path-Based routing Options 
+### Options Summary
+App Service Authentication with Path-Based routing Options.
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
