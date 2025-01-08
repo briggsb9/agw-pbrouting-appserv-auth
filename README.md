@@ -46,7 +46,7 @@ Path-based routing, however, is often used when the apps or services are related
 
 ---
 
-## Path-Based Routing Options
+## App Service Authenticaton options with Path-Based Routing
 
 ![Path-Based Routing](images/pbrouting.png)
 
