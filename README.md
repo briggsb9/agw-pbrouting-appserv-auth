@@ -131,3 +131,6 @@ App Service authentication with path-based routing options.
 4. **Health Probes**: When using App Gateway, configure health probes to target the correct path (e.g., `/YOUR_APP_PATH/`) and verify that App Service responds correctly.
 
 ---
+
+>[!IMPORTANT]
+> To conclude and repeat my intial warning - This write-up focuses on more nuanced use cases, such as scenarios where you might be trying to achieve multiple authentication flows or a mix of anonymous and authentication-enabled apps behind a single domain name. Hopefully, it will become clear that switching to subdomain routing is the simpler and more reliable option to consider first.
