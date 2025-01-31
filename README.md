@@ -6,19 +6,35 @@ Azure Application Gateway (App Gateway) provides the ability to route traffic to
 
 ## Contents
 
-1. [Understanding the Challenge with Path-Based Routing and Authentication](#understanding-the-challenge-with-path-based-routing-and-authentication)
-2. [Subdomains vs Path Based Routing](#Subdomains-vs-Path-Based-Routing)
-3. [App Service Authentication Options with Path-Based Routing ](#app-service-authenticaton-options-with-path-based-routing)
+1. [Subdomains vs Path Based Routing](#Subdomains-vs-Path-Based-Routing)
+2. [App Service Authentication Options with Path-Based Routing ](#app-service-authentication-options-with-path-based-routing)
    - [Option 1: Easy Auth with Host Header Override](#option-1-easy-auth-with-host-header-override)
    - [Option 2: Code-Based Authentication with Host Header Override](#option-2-code-based-authentication-with-host-header-override)
    - [Options Summary](#options-summary)
-5. [General Tips](#general-tips)
+3. [General Tips](#general-tips)
 
 ---
 
-## Understanding the Challenge with Path-Based Routing and Authentication
+## Subdomains vs Path Based Routing
 
-Path-based routing directs traffic based on URL paths, which can create conflicts with authentication workflows that expect specific hostnames or domains.
+When building web applications, ensuring users can access the right content efficiently is crucial. One of the most important decisions in structuring web traffic is choosing between subdomain-based routing and path-based routing. Both approaches determine how incoming requests are directed to different parts of your application, but they serve different use cases and have distinct advantages.
+
+### Subdomain Routing
+
+Subdomain-based routing is often preferable when each app has distinct requirements or independent functionality. It is also considered the path of least resistance when using easy auth.
+
+With subdomains, each application behind the App Gateway can maintain unique authentication configurations without conflicting callback paths. For instance, `https://app1.example.com` and `https://app2.example.com` can independently handle easy auth or other forms of authentication without risking path-based conflicts.
+
+The benefits of Subdomain routing include.
+- **Simplified Configuration**: Each app can have independent callback URLs, reducing overlap and the need for custom configuration.
+- **Reduced Risks**: Avoids issues with overlapping paths, host header overrides, and wildcard routing conflicts.
+- **More Reliable Auth Flows**: Supports a more stable integration with Easy Auth or other identity providers.
+
+### Path-Based Routing
+
+Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but it requires careful configuration to ensure authentication flows work as expected. 
+
+Because path-based routing directs traffic based on URL paths, it can create conflicts with authentication workflows.
 
 Challenges include:
 - **Callback URLs** must match the configuration in the Azure App Registration and authentication settings.
@@ -27,26 +43,12 @@ Challenges include:
 
 ---
 
-## Subdomains vs Path Based Routing
-
-Subdomain-based routing is often preferable when each app has distinct requirements or independent functionality. It is also considered the path of least resistance when using easy auth.
-
-With subdomains, each application behind the App Gateway can maintain unique authentication configurations without conflicting callback paths. For instance, `https://app1.example.com` and `https://app2.example.com` can independently handle easy auth or other forms of authentication without risking path-based conflicts.
-
-### Benefits of Subdomain Routing:
-- **Simplified Configuration**: Each app can have independent callback URLs, reducing overlap and the need for custom configuration.
-- **Reduced Risks**: Avoids issues with overlapping paths, host header overrides, and wildcard routing conflicts.
-- **More Reliable Auth Flows**: Supports a more stable integration with Easy Auth or other identity providers.
-
-Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but it requires careful configuration to ensure authentication flows work as expected. 
-
-
 >[!IMPORTANT]
 > This write-up focuses on more nuanced use cases, such as scenarios where you might be trying to achieve multiple authentication flows or a mix of anonymous and authentication-enabled apps behind a single domain name. Hopefully, it will become clear that switching to subdomain routing is the simpler and more reliable option to consider first.
 
 ---
 
-## App Service Authenticaton options with Path-Based Routing
+## App Service Authentication options with Path-Based Routing
 
 ![Path-Based Routing](images/pbrouting.png)
 
