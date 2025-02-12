@@ -118,6 +118,7 @@ App Service authentication with path-based routing options.
 
 Choosing the right authentication approach depends on your specific requirements, trade-offs, and constraints. Below is a summary of the options discussed, along with key considerations to help ensure a smooth implementation.
 
+
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
 | **Easy Auth**  | Minimal app code changes | Complex App Service configuration, limited flexibility |
