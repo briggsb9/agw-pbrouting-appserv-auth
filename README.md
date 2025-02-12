@@ -1,40 +1,37 @@
 # Understanding Azure App Service Authentication Challenges with Path-Based Routing
 
-Azure Application Gateway (App Gateway) provides the ability to route traffic to multiple backends using path-based routing. However, when integrating authentication, such as Azure App Service authentication (otherwise known as easy auth), complexities arise. This guidance discusses the challenges and considerations when attempting to implement such an approach.
+Azure Application Gateway supports path-based routing, allowing traffic to be directed based on the URL path of a request. Whilst App Service is compatible with this approach, managing multiple apps or mixed authentication requirements can introduce significant complexity. This article explores the challenges and key considerations when implementing path-based routing with App Service authentication.
 
 ---
 
 ## Contents
 
-1. [Subdomains vs Path Based Routing](#Subdomains-vs-Path-Based-Routing)
+1. [Host-Based vs Path-Based Routing](#Host-Based-vs-Path-Based-Routing)
 2. [App Service Authentication Options with Path-Based Routing ](#app-service-authentication-options-with-path-based-routing)
    - [Option 1: Easy Auth with Host Header Override](#option-1-easy-auth-with-host-header-override)
    - [Option 2: Code-Based Authentication with Host Header Override](#option-2-code-based-authentication-with-host-header-override)
    - [Options Summary](#options-summary)
-3. [General Tips](#general-tips)
+3. [Conclusion](#general-tips)
 
 ---
 
-## Subdomains vs Path Based Routing
+## Host Based vs Path Based Routing
 
-When building web applications, ensuring users can access the right content efficiently is crucial. One of the most important decisions in structuring web traffic is choosing between subdomain-based routing and path-based routing. Both approaches determine how incoming requests are directed to different parts of your application, but they serve different use cases and have distinct advantages.
+Firstly, it's important to understand that path-based routing is not the only option.
 
-### Subdomain Routing
+When building web applications, ensuring users can access the right content efficiently is crucial. One of the most important decisions in structuring web traffic is choosing between host-based and path-based routing. Both approaches can be used to determine how incoming requests are directed to different parts of your application(s).
 
-Subdomain-based routing is often preferable when each app has distinct requirements or independent functionality. It is also considered the path of least resistance when using easy auth.
+So why does this matter when configuring authentication? In modern authentication flows, the identity provider redirects users after successful login to what is known as a callback URL. This URL needs to be correctly configured both in your app’s settings and in the identity provider’s configuration to ensure the authentication flow completes properly. A mismatch or misconfiguration of the callback URL can break the authentication process, causing redirect errors or security issues.
 
-With subdomains, each application behind the App Gateway can maintain unique authentication configurations without conflicting callback paths. For instance, `https://app1.example.com` and `https://app2.example.com` can independently handle easy auth or other forms of authentication without risking path-based conflicts.
+With that in mind, lets looks at each approach in more detail.
 
-The benefits of Subdomain routing include.
-- **Simplified Configuration**: Each app can have independent callback URLs, reducing overlap and the need for custom configuration.
-- **Reduced Risks**: Avoids issues with overlapping paths, host header overrides, and wildcard routing conflicts.
-- **More Reliable Auth Flows**: Supports a more stable integration with Easy Auth or other identity providers.
+### Host-Based Routing
+
+Host-based routing is often the preferred choice when each app has distinct requirements or independent functionality. In this approach, each application is assigned a separate hostname or subdomain (e.g., https://app1.domain.com and https://app2.domain.com), meaning each application behind the App Gateway can maintain unique authentication configurations without conflicting callback paths.
 
 ### Path-Based Routing
 
-Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but it requires careful configuration to ensure authentication flows work as expected. 
-
-Because path-based routing directs traffic based on URL paths, it can create conflicts with authentication workflows.
+Path-based routing, however, is often used when the apps or services are related and need to share a common base URL. Examples include, sites with shared authentication or endpoints that are part of the same application. In these cases, path-based routing may be preferable, but more nuanced scenarios will require careful configuration to ensure authentication flows work as expected.
 
 Challenges include:
 - **Callback URLs** must match the configuration in the Azure App Registration and authentication settings.
@@ -44,7 +41,7 @@ Challenges include:
 ---
 
 >[!IMPORTANT]
-> This write-up focuses on more nuanced use cases, such as scenarios where you might be trying to achieve multiple authentication flows or a mix of anonymous and authentication-enabled apps behind a single domain name. Hopefully, it will become clear that switching to subdomain routing is the simpler and more reliable option to consider first.
+> From this point forward, this write-up highlights the particular challenge of handling a mix of authenticated and anonymous apps under a single domain using Azure App Gateway and App Service.
 
 ---
 
@@ -52,14 +49,15 @@ Challenges include:
 
 ![Path-Based Routing](images/pbrouting.png)
 
-The diagram above shows a scenario where apps sharing an App Service plan may require different approaches to authentication, i.e., one with authentication and one without (anonymous).  
+The diagram above illustrates a scenario where path-based routing was selected to facilitate rapid deployment of automated environments in an attempt to minimise domain and certificate management overhead. Here, multiple apps with varying authentication requirements—one requiring authentication and another allowing anonymous access—share an App Service plan to optimise costs.
 
 Authentication can be handled using two options: easy auth and code-based authentication. In both options, the default App Service hostname is used to avoid domain conflicts. This is because you cannot configure the same custom domain for multiple App Services. See [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/manage-custom-dns-migrate-domain#how-do-i-migrate-a-domain-from-another-app:~:text=A%20domain%20name%20can%20be%20assigned%20to%20only%20one%20app%20in%20each%20deployment%20unit.) for more information.
 
 >[!WARNING]
-> Not using a custom domain on the App Service backend goes against general best practice. Verify the impact of using the default hostname by consulting [Azure’s host name preservation guide](https://learn.microsoft.com/en-us/azure/architecture/best-practices/host-name-preservation).
+> Not using a custom domain on the App Service backend goes against general best practice. If you choose to experiment with using the default app service hostname instead of a customer domain, be sure to review the [Azure’s host name preservation guide](https://learn.microsoft.com/en-us/azure/architecture/best-practices/host-name-preservation) to verify the impact.
 
 ---
+Lets look at the two options shown in the diagram.
 
 ### Option 1: Easy Auth with Host Header Override
 
@@ -67,15 +65,15 @@ Using Azure App Service’s Easy Auth with path-based routing requires configuri
 
 Note: The guidance below assume you have an existing Azure App Service with [easy auth](https://learn.microsoft.com/en-us/azure/app-service/overview-authentication-authorization) enabled and an Azure Application Gateway set up with [path-based routing](https://learn.microsoft.com/en-us/azure/application-gateway/create-url-route-portal) rules.
 
-#### Considerations:
+#### Configuration:
 1. **App Gateway Configuration**: Set up the backend HTTP setting in App Gateway to pick the hostname from the backend target. This uses the default App Service hostname to avoid domain conflicts. 
 
 2. **App Registration Callback URL**: Ensure the app registration includes the correct callback URL, including the path (e.g., `https://yourdomain.com/yourpath/.auth/login/aad/callback`).
 
 3. **Easy Auth Configuration (auth.json)**:
-    - When using App Service Easy Auth behind Application Gateway, authentication redirects default to the app's Azure domain, often causing errors. To fix this, configure Easy Auth to read the X-Original-Host header from Application Gateway using file-based configuration as described in [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#enabling-file-based-configuration).  
+    - When using App Service Easy Auth behind Application Gateway, authentication redirects default to the app's Azure domain, often causing errors. To fix this, configure Easy Auth to read the X-Original-Host header from Application Gateway using file-based configuration as described in [Azure’s documentation](https://learn.microsoft.com/en-us/azure/app-service/configure-authentication-file-based#enabling-file-based-configuration). The documentation describes how you can create a file called auth.json to override the behaviour of App Service Authentication / Authorization for that site.
 
-    - Update your `auth.json` to define the required HTTP settings:
+    - After creating the `auth.json` file, ensure you update it to define the required HTTP settings shown below::
         ```json
         "httpSettings": {
         "requireHttps": true,
@@ -102,7 +100,7 @@ For scenarios requiring more flexibility, implementing custom authentication wit
 
 Note: The guidance below assume you have an existing Azure App Service and an Azure Application Gateway set up with [path-based routing](https://learn.microsoft.com/en-us/azure/application-gateway/create-url-route-portal) rules.
 
-#### Considerations:
+#### Configuration:
 1. **Set up Authentication in Code**: Configure your app to authenticate users using a code-based approach with Microsoft Entra ID. Refer to the [Quickstart for Python Flask web app](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-web-app-python-flask?tabs=windows) to set up authentication with a sample app.
 
 2. **App Registration Adjustments**: Ensure the redirect URI in the app registraion matches that of your app hostname and path. For the quickstart this will be 'https://YOURDOMAIN.COM/YOURPATH/getAToken'
@@ -115,22 +113,30 @@ Note: The guidance below assume you have an existing Azure App Service and an Az
 
 ---
 
-### Options Summary
+### Options Summary and Considerations
 App Service authentication with path-based routing options.
+
+Choosing the right authentication approach depends on your specific requirements, trade-offs, and constraints. Below is a summary of the options discussed, along with key considerations to help ensure a smooth implementation.
 
 | Approach                          | Pros                                 | Cons                                  |
 |-----------------------------------|--------------------------------------|---------------------------------------|
 | **Easy Auth**  | Minimal app code changes | Complex App Service configuration, limited flexibility |
 | **Code-Based Auth**     | Full control, flexible, login page customisation               | Dependency on developer skills and code level changes |
 
----
 
-## General Tips
-
+With both options keep the following in mind:
 1. **Host Headers and Redirect URLs**: Ensure that host headers match expected values to prevent redirect mismatches.
 2. **Callback URL Consistency**: Confirm that callback URLs are consistently configured in both App Service and Entra ID to match the path-based routing setup.
 3. **Avoid Overlapping Paths**: Be cautious with wildcard entries in routing (e.g., `/app*`), which may unintentionally capture routes for other applications.
 4. **Health Probes**: When using App Gateway, configure health probes to target the correct path (e.g., `/YOUR_APP_PATH/`) and verify that App Service responds correctly.
+
+---
+
+## Conclusion
+
+While path-based routing enables apps to share a common domain, it does introduce additional authentication complexities that shouldn't be considered lightly when comparing to the additional domain and certificate management of the subdomain approach. Managing callback URLs, host headers, and routing conflicts can complicate authentication workflows, especially when mixing authenticated and anonymous apps.
+
+Given these challenges, using host-based routing (with subdomains) is often a simpler and more reliable solution for managing distinct apps. By assigning each app its own subdomain, you can maintain separate authentication configurations, reducing the risk of conflicts and simplifying management. Path-based routing can still be used effectively in scenarios where apps share common authentication requirements, but subdomains offer a more streamlined approach when dealing with varied app needs.
 
 ---
 
